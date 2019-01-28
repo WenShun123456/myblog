@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block main %}
+<script type="text/javascript" src='/public/js/comment.js'></script>
+{% if data.article %}
+<!-- 文章主体 -->
+<div class="article-detail-box">
+    <h2 class="title">{{ data.article.title }}</h2>
+    <div class="info">
+        作者:<span class="info-item author">{{ data.article.user.username }}</span>&nbsp;-
+        时间:<span class="info-item time">{{ data.article.addTime | date('y/m/d') }}</span>&nbsp;-
+        阅读量:<span class="info-item views">{{ data.article.views }}</span>&nbsp;-
+        评论:<span class="info-item comment" id='info-comment-count'>{{ data.article.comments.length }}</span>
+    </div>
+    <div class="content" id="article-content">
+        {% autoescape false %}
+        {{ data.article_content_html }}
+        {% endautoescape %}
+    </div>
+</div>
+<!-- 文章评论提交 -->
+<div class="article-comment">
+    <div class="top">
+        <span class="comment-title">评论</span>
+        <span class="comment-count">一共有
+			<span class="count">
+		{{data.article.comments.length}}
+	</span>条评论</span>
+    </div>
+    <input type="text" id="article_id" value='{{ data.article._id.toString() }}' class="hidden">
+    {% if data.userInfo._id %}
+    <p class="username">{{ data.userInfo.username }}</p>
+    <input type="text" class="comment-input" id='comment-txt'>
+    <button class="comment-push">评 论</button>
+    {% else %}
+    <h3 class="no-login">只有登录用户才能评论</h3>
+    {% endif %}
+
+    <!-- 评论列表 -->
+    <div class="comments-list">
+    </div>
+</div>
+{% else %}
+<div class="article-none">
+	<img src="/public/img/cry.png" alt="">
+	<h1>404 Not Found</h1>
+</div>
+{% endif %}

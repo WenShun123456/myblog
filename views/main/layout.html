@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name='viewport' 
+		  content='width=device-width,initial-scale=1.0, maximum-scale=1.0,mininum=1.0,user-scalable=no'>
+	<link rel="stylesheet" type="text/css" href="/public/css/main.css">
+	<link rel="stylesheet" href="/public/css/phoneStyl.css">
+	<!--语法高亮 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/googlecode.min.css">
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/public/js/layer-v3.1.1/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/main.js"></script>
+	<title>{{ title }}</title>
+</head>
+<body>
+<!-- 页头开始 -->
+<header>
+	{% if !data.userInfo._id %}
+	<div class="bar">
+		<div class="login">登录</div>
+		<div class="register">注册</div>
+	</div>
+	<div class="myavatar">	
+		<img src="/public/img/avatar.jpg" alt="头像" class="head">
+	</div>
+	{%  else %}
+	<div class="userInfo">
+		{% if data.avatar %}
+		<img src="{{ data.avatar }}" alt="头像" class="head">
+		{% else %}
+		<img src="/public/img/head.jpg" alt="头像" class="head">
+		{% endif %}
+		<span class="text">
+			你好 
+			{% if data.userInfo.isAdmin %}
+			<span style="color:orange">管理员</span>
+			<a href="/admin" class="admin">进入后台</a>
+			{% else %}
+			<span style="color:orange">{{ data.userInfo.username }}</span>
+			{% endif %}
+			<span class="logout">退出</span>
+		</span>
+	</div>
+	{% endif %}
+</header>
+<!-- 页头结束 -->
+
+<!-- banner和nav开始 -->
+<section class="content">
+	<div class="banner">
+		<img src="/public/img/banner_star.jpg" alt="" class="banner-img">
+	</div>
+	<div class="nav-wrapper">
+		<div class="nav">
+			<li class="{% if !data.category %} active {% endif %}">
+				<a href="/">首页</a>
+			</li>
+			{% for cate in data.categorys %}
+			<li class="{% if cate._id.toString() === data.category %} active {% endif %}">
+				<a href="/?category={{ cate._id.toString() }}">{{ cate.category_name }}</a>
+			</li>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+<!-- 结束 -->
+
+<!-- 博文列表 -->
+<section class="article">
+	{% if data.articles.length === 0 %}
+	<div class="article-none">
+		<img src="/public/img/cry.png" alt="">
+		<h1>暂无文章</h1>
+	</div>
+	{% endif %}
+	{% block main %}
+	{% endblock %}
+
+	<!-- 右侧信息列表 -->
+	{% if data.articles || data.articles.length != 0 %}
+	<div class="area-message">
+		{% if data.userInfo._id %}
+		<div class="userInfo">
+			<p class="right-title">用户信息</p>
+			<p class="hr-2px"></p>
+			<p class="username">用户名：<span>{{ data.userInfo.username }}</span></p>
+			<p class="welcome">欢迎来到我的博客！</p>
+		</div>
+		{% endif %}
+		<div class="friend-link">
+			<div class="avatar">
+				<img src="/public/img/avatar.jpg">
+				<div class="own-name">不净连华</div>
+				<div class="sign">背着包包去旅行</div>
+			</div>
+			<div class="myuse">
+				<p class="link">擅长技能</p>
+				<p>
+					<span>html5</span><span>css</span><span>js</span><br>
+					<span>jQuery</span><span>bootstrap</span><span>vue.js</span><br>
+					<span>node</span> <span>webpack</span><span>express</span><span>mongodb</span>
+				</p>
+				<p class="link">
+					<a target="_blank" href="https://github.com/WenShun123456?tab=repositories">我的githup</a>
+				</p>
+			</div>
+			
+		</div>
+	</div>
+	{% endif %}
+</section>
+<!-- 博文列表结束 -->
+
+<!-- 页脚开始 -->
+<footer>
+	<p class="author">&copy;不净连华</p>
+	<p class="time">2019-01-01 9:00</p>
+</footer>
+<!-- 页脚结束 -->
+
+
+<!-- 登录弹出层 -->
+<div class="login-dialog dialog">
+	<div class="wrapper">
+		<div class="username-wrapper">
+			<input type="text" name='username' placeholder="用户名" class="username">
+		</div>
+		<div class="password-wrapper">
+			<input type="password" name="password" placeholder="密码" class="password">
+			<span class="eye eye_show"></span>
+		</div>
+		<div class="submit">登 录</div>
+	</div>
+</div>
+
+
+<!-- 注册弹出层 -->
+<div class="register-dialog dialog">
+	<div class="wrapper">
+		<div class="username-wrapper">
+			<input type="text" placeholder='用户名' name='username' class="username">
+		</div>
+		<div class="password-wrapper">
+			<input type="password" name='password' placeholder='密码' class="password">
+			<span class="eye eye_show"></span>
+		</div>
+		<div class="password-wrapper">
+			<input type="password" name='repeat' placeholder="确认密码" class="password">
+			<span class="eye eye_show"></span>
+		</div>
+		<div class="submit">注 册</div>
+	</div>
+</div>
+<!-- loading图片 -->
+<div class="loading">
+	<img src="/public/img/loading.gif">
+</div>
+
+<!-- 遮罩层 -->
+<div class="left-wrapper"></div>
+</body>
+</html>
